@@ -28,6 +28,7 @@ model User {
 model Category {
   id        String      @id @default(cuid())
   name      String
+  image     String
   // Foreign key
   parentId  String?
   // Parent category (nullable for root)
