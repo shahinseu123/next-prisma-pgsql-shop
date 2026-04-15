@@ -1,5 +1,4 @@
 import { hashPassword, signToken } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validations";
 import { NextRequest, NextResponse } from "next/server";
