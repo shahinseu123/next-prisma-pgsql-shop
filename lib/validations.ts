@@ -18,12 +18,12 @@ export const productSchema = z.object({
   price: z.number().positive('Price must be positive'),
   stock: z.number().int().nonnegative('Stock cannot be negative'),
   category: z.string().min(1, 'Category is required'),
-  imageUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  imageUrl:    z.string().url().optional()
 })
 
 export const categorySchema = z.object({
   name: z.string().min(2, 'Name too short'),
-  imageUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  imageUrl:    z.string().url().optional()
 })
 
 export const cartItemSchema = z.object({

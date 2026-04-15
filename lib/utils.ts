@@ -1,4 +1,16 @@
 
+interface PaginateOptions {
+  page:    number
+  limit:   number
+}
+
+interface PaginatedResult<T> {
+  data:       T[]
+  total:      number
+  page:       number
+  totalPages: number
+}
+
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -29,4 +41,28 @@ export function calculateDiscount(
     return Math.min((subtotal * value) / 100, subtotal)
   }
   return Math.min(value, subtotal)
+}
+
+
+
+// Call this from any route handler instead of repeating skip/take logic
+export async function paginate<T>(
+  model: { findMany: Function; count: Function },
+  options: PaginateOptions,
+  query: { where?: object; orderBy?: object; select?: object } = {}
+): Promise<PaginatedResult<T>> {
+  const { page, limit } = options
+  const skip = (page - 1) * limit
+
+  const [data, total] = await Promise.all([
+    model.findMany({ ...query, skip, take: limit }),
+    model.count({ where: query.where }),
+  ])
+
+  return {
+    data,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  }
 }
